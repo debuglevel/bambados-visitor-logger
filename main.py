@@ -1,4 +1,5 @@
 import requests
+import datetime
 
 headers = {
     'Connection': 'keep-alive',
@@ -25,4 +26,6 @@ j = response.json()
 count = j[0]["personCount"]
 max = j[0]["maxPersonCount"]
 
-print(f"{count}/{max}")
+iso8601 =  datetime.datetime.now().replace(microsecond=0).isoformat()
+
+print(f"{iso8601};{count};{max}")
