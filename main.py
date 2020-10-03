@@ -25,7 +25,8 @@ response = requests.get('https://api.ticos-systems.cloud/api/gates/counter', hea
 j = response.json()
 count = j[0]["personCount"]
 max = j[0]["maxPersonCount"]
+free = max-count
 
 iso8601 =  datetime.datetime.now().replace(microsecond=0).isoformat()
 
-print(f"{iso8601};{count};{max}")
+print(f"{iso8601};{count};{free};{max}")
