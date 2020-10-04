@@ -1,7 +1,7 @@
 import requests
 import datetime
 
-def main():
+def get_data():
     headers = {
         'Connection': 'keep-alive',
         'Accept': 'application/json, text/plain, */*',
@@ -30,6 +30,10 @@ def main():
 
     iso8601 =  datetime.datetime.now().replace(microsecond=0).isoformat()
 
+    return count, max, free, iso8601
+
+def main():
+    count, max, free, iso8601 = get_data()
     print(f"{iso8601};{count};{free};{max}")
 
 if __name__ == "__main__":
