@@ -1,5 +1,6 @@
 import requests
 import datetime
+import argparse
 
 def retrieve_visitors():
     headers = {
@@ -36,10 +37,10 @@ def get_visitors():
 def print_csv(visitor_data):
     current_visitors, maximum_seats, free_seats, current_datetime = visitor_data
     iso8601_timestamp = current_datetime.replace(microsecond=0).isoformat()
-    
+
     print(f"{iso8601_timestamp};{current_visitors};{free_seats};{maximum_seats}")
 
-def print_influxdbline(visitor_data):
+def print_influxdblines(visitor_data):
     current_visitors, maximum_seats, free_seats, current_datetime = visitor_data
     nanoseconds_timestamp = int(current_datetime.timestamp() * 1000 * 1000 * 1000)
 
@@ -48,9 +49,17 @@ def print_influxdbline(visitor_data):
     print(f"free value={free_seats} {nanoseconds_timestamp}")
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--csv", help="output as CSV", action="store_true")
+    parser.add_argument("--influx", help="output as InfluxDB lines", action="store_true")
+    args = parser.parse_args()
+    
     (visitor_data) = get_visitors()
-    print_csv(visitor_data)
-    print_influxdbline(visitor_data)
+
+    if args.csv:
+        print_csv(visitor_data)
+    if args.influx:
+        print_influxdblines(visitor_data)
 
 if __name__ == "__main__":
     main()
