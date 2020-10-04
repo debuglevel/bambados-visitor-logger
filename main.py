@@ -53,15 +53,28 @@ def get_influxdblines(visitor_data):
     return influxdb_lines
 
 def print_influxdblines(visitor_data):
-    influxdb_lines = get_influxdblines(get_influxdblines(visitor_data))
+    influxdb_lines = get_influxdblines(visitor_data)
 
     for influxdb_line in influxdb_lines:
         print(influxdb_line)
+
+def write_influxdb(influxdb_connection_data, visitor_data):
+    influxdb_lines = get_influxdblines(visitor_data)
+    influxdb_host, influxdb_port, influxdb_database, influxdb_username, influxdb_password = influxdb_connection_data
+
+    influxdb_client = InfluxDBClient(influxdb_host, influxdb_port, influxdb_username, influxdb_password, influxdb_database)
+    influxdb_client.write_points(influxdb_lines, protocol='line')
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--csv", help="write CSV to stdout", action="store_true")
     parser.add_argument("--influx", help="write InfluxDB lines to stdout", action="store_true")
+    parser.add_argument("--influxdb", help="write InfluxDB lines to InfluxDB", action="store_true")
+    parser.add_argument("--influxdb-host", help="InfluxDB host", type=str)
+    parser.add_argument("--influxdb-port", help="InfluxDB port", type=int)
+    parser.add_argument("--influxdb-database", help="InfluxDB database", type=str)
+    parser.add_argument("--influxdb-username", help="InfluxDB username", type=str)
+    parser.add_argument("--influxdb-password", help="InfluxDB password", type=str)
     args = parser.parse_args()
     
     (visitor_data) = get_visitors()
@@ -70,6 +83,9 @@ def main():
         print_csv(visitor_data)
     if args.influx:
         print_influxdblines(visitor_data)
+    if args.influxdb:
+        (influxdb_connection_data) = args.influxdb_host, args.influxdb_port, args.influxdb_database, args.influxdb_username, args.influxdb_password
+        write_influxdb(influxdb_connection_data, visitor_data)
 
 if __name__ == "__main__":
     main()
