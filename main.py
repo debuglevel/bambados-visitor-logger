@@ -36,6 +36,7 @@ def get_visitors():
 def print_csv(visitor_data):
     current_visitors, maximum_seats, free_seats, current_datetime = visitor_data
     iso8601_timestamp = current_datetime.replace(microsecond=0).isoformat()
+    
     print(f"{iso8601_timestamp};{current_visitors};{free_seats};{maximum_seats}")
 
 def print_influxdbline(visitor_data):
