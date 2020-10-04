@@ -8,6 +8,17 @@ This is a simple logger for Bamberg Bambados. It could easily adapter for every 
 
 Afterwards this CSV could be fed into a graph visualizer like Grafana to generate something beautiful. (Althogh feeding it directly into a time series database would be better.)
 
+## Installation
+
+Do the usual Python venv stuff:
+
+```
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+python3 main.py
+```
+
 # Golang version
 
 Although probably a really bad piece of golang code, it works. But unfortunately it is not as small as expected (~6MB) 🤔, which was the intention. It's a bit faster. But that's not worth the effort. At least it's a single binary, which is actually a benefit compared to Python venv hell. 🤷‍♀️
