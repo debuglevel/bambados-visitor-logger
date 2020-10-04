@@ -50,8 +50,8 @@ def print_influxdblines(visitor_data):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--csv", help="output as CSV", action="store_true")
-    parser.add_argument("--influx", help="output as InfluxDB lines", action="store_true")
+    parser.add_argument("--csv", help="write CSV to stdout", action="store_true")
+    parser.add_argument("--influx", help="write InfluxDB lines to stdout", action="store_true")
     args = parser.parse_args()
     
     (visitor_data) = get_visitors()
