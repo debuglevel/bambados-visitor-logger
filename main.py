@@ -27,13 +27,13 @@ def get_data():
     count = j[0]["personCount"]
     max = j[0]["maxPersonCount"]
     free = max-count
+    timestamp = datetime.datetime.now()
 
-    iso8601 =  datetime.datetime.now().replace(microsecond=0).isoformat()
-
-    return count, max, free, iso8601
+    return count, max, free, timestamp
 
 def main():
-    count, max, free, iso8601 = get_data()
+    count, max, free, timestamp = get_data()
+    iso8601 = timestamp.replace(microsecond=0).isoformat()
     print(f"{iso8601};{count};{free};{max}")
 
 if __name__ == "__main__":
