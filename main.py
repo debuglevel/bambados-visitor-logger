@@ -33,10 +33,13 @@ def get_visitors():
 
     return current_visitors, maximum_seats, free_seats, current_datetime
 
-def main():
+def print_csv():
     current_visitors, maximum_seats, free_seats, timestamp = get_visitors()
     iso8601_timestamp = timestamp.replace(microsecond=0).isoformat()
     print(f"{iso8601_timestamp};{current_visitors};{free_seats};{maximum_seats}")
+
+def main():
+    print_csv()
 
 if __name__ == "__main__":
     main()
