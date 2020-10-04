@@ -23,18 +23,18 @@ def get_data():
 
     response = requests.get('https://api.ticos-systems.cloud/api/gates/counter', headers=headers, params=params)
 
-    j = response.json()
-    count = j[0]["personCount"]
-    max = j[0]["maxPersonCount"]
-    free = max-count
-    timestamp = datetime.datetime.now()
+    visitorData = response.json()
+    currentVisitors = visitorData[0]["personCount"]
+    maximumSeats = visitorData[0]["maxPersonCount"]
+    freeSeats = maximumSeats - currentVisitors
+    currentDateTime = datetime.datetime.now()
 
-    return count, max, free, timestamp
+    return currentVisitors, maximumSeats, freeSeats, currentDateTime
 
 def main():
-    count, max, free, timestamp = get_data()
-    iso8601 = timestamp.replace(microsecond=0).isoformat()
-    print(f"{iso8601};{count};{free};{max}")
+    currentVisitors, maximumSeats, freeSeats, timestamp = get_data()
+    iso8601timestamp = timestamp.replace(microsecond=0).isoformat()
+    print(f"{iso8601timestamp};{currentVisitors};{freeSeats};{maximumSeats}")
 
 if __name__ == "__main__":
     main()
