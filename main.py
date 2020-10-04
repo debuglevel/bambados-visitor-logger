@@ -79,11 +79,11 @@ def main():
     
     (visitor_data) = get_visitors()
 
-    if args.csv:
+    if args.write_csv:
         print_csv(visitor_data)
-    if args.influx:
+    if args.write_influxdblines:
         print_influxdblines(visitor_data)
-    if args.influxdb:
+    if args.write_influxdb:
         (influxdb_connection_data) = args.influxdb_host, args.influxdb_port, args.influxdb_database, args.influxdb_username, args.influxdb_password
         write_influxdb(influxdb_connection_data, visitor_data)
 
