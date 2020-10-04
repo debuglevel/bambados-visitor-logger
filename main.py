@@ -1,3 +1,4 @@
+from influxdb import InfluxDBClient
 import requests
 import datetime
 import argparse
@@ -40,13 +41,22 @@ def print_csv(visitor_data):
 
     print(f"{iso8601_timestamp};{current_visitors};{free_seats};{maximum_seats}")
 
-def print_influxdblines(visitor_data):
+def get_influxdblines(visitor_data):
     current_visitors, maximum_seats, free_seats, current_datetime = visitor_data
     nanoseconds_timestamp = int(current_datetime.timestamp() * 1000 * 1000 * 1000)
 
-    print(f"current value={current_visitors} {nanoseconds_timestamp}")
-    print(f"maximum value={maximum_seats} {nanoseconds_timestamp}")
-    print(f"free value={free_seats} {nanoseconds_timestamp}")
+    influxdb_lines = []
+    influxdb_lines.append(f"current value={current_visitors} {nanoseconds_timestamp}")
+    influxdb_lines.append(f"maximum value={maximum_seats} {nanoseconds_timestamp}")
+    influxdb_lines.append(f"free value={free_seats} {nanoseconds_timestamp}")
+
+    return influxdb_lines
+
+def print_influxdblines(visitor_data):
+    influxdb_lines = get_influxdblines(get_influxdblines(visitor_data))
+
+    for influxdb_line in influxdb_lines:
+        print(influxdb_line)
 
 def main():
     parser = argparse.ArgumentParser()
