@@ -67,8 +67,8 @@ def write_influxdb(influxdb_connection_data, visitor_data):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--write-csv", help="write CSV to stdout", action="store_true")
-    parser.add_argument("--write-influxdblines", help="write InfluxDB lines to stdout", action="store_true")
+    parser.add_argument("--print-csv", help="write CSV to stdout", action="store_true")
+    parser.add_argument("--print-influxdblines", help="write InfluxDB lines to stdout", action="store_true")
     parser.add_argument("--write-influxdb", help="write InfluxDB lines to InfluxDB", action="store_true")
     parser.add_argument("--influxdb-host", help="InfluxDB host", type=str)
     parser.add_argument("--influxdb-port", help="InfluxDB port", type=int)
@@ -79,9 +79,9 @@ def main():
     
     (visitor_data) = get_visitors()
 
-    if args.write_csv:
+    if args.print_csv:
         print_csv(visitor_data)
-    if args.write_influxdblines:
+    if args.print_influxdblines:
         print_influxdblines(visitor_data)
     if args.write_influxdb:
         (influxdb_connection_data) = args.influxdb_host, args.influxdb_port, args.influxdb_database, args.influxdb_username, args.influxdb_password
