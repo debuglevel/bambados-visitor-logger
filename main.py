@@ -1,4 +1,6 @@
 from influxdb import InfluxDBClient
+from influxdb.exceptions import InfluxDBServerError
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_random_exponential
 import requests
 import datetime
 import argparse
@@ -52,14 +54,12 @@ def get_influxdblines(visitor_data):
 
     return influxdb_lines
 
-def print_influxdblines(visitor_data):
-    influxdb_lines = get_influxdblines(visitor_data)
-
+def print_influxdblines(influxdb_lines):
     for influxdb_line in influxdb_lines:
         print(influxdb_line)
 
-def write_influxdb(influxdb_connection_data, visitor_data):
-    influxdb_lines = get_influxdblines(visitor_data)
+@retry(retry=retry_if_exception_type(InfluxDBServerError), stop=stop_after_attempt(10), wait=wait_random_exponential(multiplier=1, max=60))
+def write_influxdb(influxdb_connection_data, influxdb_lines):
     influxdb_host, influxdb_port, influxdb_database, influxdb_username, influxdb_password = influxdb_connection_data
 
     influxdb_client = InfluxDBClient(influxdb_host, influxdb_port, influxdb_username, influxdb_password, influxdb_database)
@@ -82,10 +82,10 @@ def main():
     if args.print_csv:
         print_csv(visitor_data)
     if args.print_influxdblines:
-        print_influxdblines(visitor_data)
+        print_influxdblines(get_influxdblines(visitor_data))
     if args.write_influxdb:
         (influxdb_connection_data) = args.influxdb_host, args.influxdb_port, args.influxdb_database, args.influxdb_username, args.influxdb_password
-        write_influxdb(influxdb_connection_data, visitor_data)
+        write_influxdb(influxdb_connection_data, get_influxdblines(visitor_data))
 
 if __name__ == "__main__":
     main()
