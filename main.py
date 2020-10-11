@@ -58,7 +58,7 @@ def print_influxdblines(influxdb_lines):
     for influxdb_line in influxdb_lines:
         print(influxdb_line)
 
-@retry(retry=retry_if_exception_type(InfluxDBServerError), stop=stop_after_attempt(10), wait=wait_random_exponential(multiplier=1, max=60))
+@retry(retry=retry_if_exception_type(InfluxDBServerError), stop=stop_after_attempt(20), wait=wait_random_exponential(multiplier=1, max=300))
 def write_influxdb(influxdb_connection_data, influxdb_lines):
     influxdb_host, influxdb_port, influxdb_database, influxdb_username, influxdb_password = influxdb_connection_data
 
