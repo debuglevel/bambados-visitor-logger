@@ -77,7 +77,12 @@ def main():
     parser.add_argument("--influxdb-password", help="InfluxDB password", type=str)
     args = parser.parse_args()
     
-    (visitor_data) = get_visitors()
+    try:
+        (visitor_data) = get_visitors()
+    except (requests.exceptions.ConnectionError):
+        # if an error occurs on retrieving the data, it does not really make sense to retry it; as this script is probably called by a cronjob and the data is already gone.
+        # TODO: this is okay for temporary failures, but not be too wise as permanent failures will also be ignored silently
+        return
 
     if args.print_csv:
         print_csv(visitor_data)
@@ -86,6 +91,7 @@ def main():
     if args.write_influxdb:
         (influxdb_connection_data) = args.influxdb_host, args.influxdb_port, args.influxdb_database, args.influxdb_username, args.influxdb_password
         write_influxdb(influxdb_connection_data, get_influxdblines(visitor_data))
+
 
 if __name__ == "__main__":
     main()
